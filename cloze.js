@@ -1,4 +1,3 @@
-
 var ClozeFlashcard = function(cloze, question){
 	this.cloze = cloze;
 	this.question = question;
