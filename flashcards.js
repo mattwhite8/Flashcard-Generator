@@ -18,7 +18,7 @@ function start(){
 		{
 			type: "list",
 			message: "Make your choice",
-			choices: ["Quiz me!", "Add a flashcard", "End Program"],
+			choices: ["Quiz me!", "Add a cloze flashcard", "End Program"],
 			name: "choices"
 		}
 
@@ -26,33 +26,40 @@ function start(){
 
 		if(data.choices === "Quiz me!"){
 			quiz();
-		}else if(data.choices === "Add a flashcard"){
-
-			inquirer.prompt([
-
-				{
-					type: "input",
-					message: "Enter the text that will be your answer",
-					name: "cloze",
-					default: ""
-				},
-
-				{
-					type: "input",
-					message: "Enter the entire question including your answer",
-					name: "question",
-					default: ""
-				}
-
-			]).then(function(data){
-				clozeExports.arr.push(new clozeExports.ClozeFlashcard(data.cloze, data.question));
-				start();
-			})
-
+		}else if(data.choices === "Add a cloze flashcard"){
+			newCloze();
 		}else {
 			process.exit();
 		};
 
+	});
+};
+
+function newCloze(){
+	inquirer.prompt([
+
+		{
+			type: "input",
+			message: "Enter the text that will be your answer",
+			name: "cloze",
+			default: ""
+		},
+
+		{
+			type: "input",
+			message: "Enter the entire question including your answer",
+			name: "question",
+			default: ""
+		}
+
+	]).then(function(data){
+		if(data.question.indexOf(data.cloze) !== -1){
+			clozeExports.arr.push(new clozeExports.ClozeFlashcard(data.cloze, data.question));
+			start();
+		}else {
+			console.log("Your answer is not included in the question");
+			newCloze();
+		};
 	});
 };
 
