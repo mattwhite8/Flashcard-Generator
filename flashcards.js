@@ -103,15 +103,16 @@ function gameOver(){
 
 	]).then(function(data){
 
-		if(data.confirm){
+		count = 0;
+		rightCount = 0;
+		wrongCount = 0;
 
-			count = 0;
-			rightCount = 0;
-			wrongCount = 0;
+		if(data.confirm){
 
 			quiz();
 
 		}else {
+
 			start();
 		}
 
