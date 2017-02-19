@@ -5,7 +5,7 @@ var ClozeFlashcard = function(cloze, question){
 
 	this.displayQuestion = function(){
 		var display = question.replace(cloze, "...");
-		console.log(display);
+		return display;
 	}
 
 }
@@ -22,4 +22,4 @@ for (var key in material){
 	arr.push(new ClozeFlashcard(key, material[key]));
 }
 
-console.log(arr[0].displayQuestion());
+module.exports = arr;
