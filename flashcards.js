@@ -29,7 +29,7 @@ function start(){
 
 	]).then(function(data){
 
-		if(data.choices === "Quiz me with cloze flashcards!!"){
+		if(data.choices === "Quiz me with cloze flashcards!"){
 			quiz();
 		}else if(data.choices === "Quiz me with basic flashcards!"){
 			basicQuiz();
