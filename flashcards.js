@@ -64,11 +64,29 @@ function newCloze(){
 	]).then(function(data){
 		if(data.question.indexOf(data.cloze) !== -1){
 			clozeExports.arr.push(new clozeExports.ClozeFlashcard(data.cloze, data.question));
-			start();
+
+			inquirer.prompt([
+
+				{
+					type: "confirm",
+					name: "confirm",
+					message: "Do you want to save your card to output.txt?"
+				}
+
+			]).then(function(data){
+				if(data.confirm){
+					saveCloze(clozeExports.arr[clozeExports.arr.length - 1]);
+					start();
+				}else {
+					start();
+				};
+			});
+
 		}else {
 			console.log("Your answer is not included in the question");
 			newCloze();
 		};
+
 	});
 };
 
@@ -108,17 +126,20 @@ function newBasic(){
 				start();
 			};
 		});
+
 	});
 };
 
 function saveBasic(flashcard){
-	fs.appendFile('output.txt', `Front: ${flashcard.front} Back: ${flashcard.back}`, 'UTF-8', function(error){
+	fs.appendFile('output.txt', `Front: ${flashcard.front} Back: ${flashcard.back} \n`, 'UTF-8', function(error){
 		if (error) throw error;
 	});
 }
 
-function saveCloze(){
-
+function saveCloze(flashcard){
+	fs.appendFile('output.txt', `Cloze: ${flashcard.cloze} Question: ${flashcard.question} \n`, 'UTF-8', function(error){
+		if (error) throw error;
+	});
 }
 
 function quiz(){
