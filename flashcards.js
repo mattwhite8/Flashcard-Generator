@@ -2,11 +2,11 @@ var clozeExports = require('./cloze.js');
 var basicExports = require('./basic.js');
 
 var inquirer = require('inquirer');
+var fs = require('fs');
 
 var count = 0;
 var rightCount = 0;
 var wrongCount = 0;
-
 
 function start(){
 	console.log('');
@@ -91,9 +91,35 @@ function newBasic(){
 
 	]).then(function(data){
 		basicExports.arr.push(new basicExports.BasicFlashcard(data.front, data.back));
-		start();
+
+		inquirer.prompt([
+
+			{
+				type: "confirm",
+				name: "confirm",
+				message: "Do you want to save your card to output.txt?"
+			}
+
+		]).then(function(data){
+			if(data.confirm){
+				saveBasic(basicExports.arr[basicExports.arr.length - 1]);
+				start();
+			}else {
+				start();
+			};
+		});
 	});
 };
+
+function saveBasic(flashcard){
+	fs.appendFile('output.txt', `Front: ${flashcard.front} Back: ${flashcard.back}`, 'UTF-8', function(error){
+		if (error) throw error;
+	});
+}
+
+function saveCloze(){
+
+}
 
 function quiz(){
 	if(count < clozeExports.arr.length){
