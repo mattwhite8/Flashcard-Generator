@@ -1,13 +1,18 @@
+//Pull in our exports
 var clozeExports = require('./cloze.js');
 var basicExports = require('./basic.js');
 
+//Inquirer will help us create the CLI
 var inquirer = require('inquirer');
+//FS will let us write to file
 var fs = require('fs');
 
+//Variables to help keep track of our game logic
 var count = 0;
 var rightCount = 0;
 var wrongCount = 0;
 
+//This is the main component of the CLI, all options are accessed from here
 function start(){
 	console.log('');
 	console.log('==================================');
@@ -44,7 +49,9 @@ function start(){
 	});
 };
 
+
 function newCloze(){
+	//Use inquirer to gather the two necessary inputs for the cloze constructor
 	inquirer.prompt([
 
 		{
@@ -62,9 +69,11 @@ function newCloze(){
 		}
 
 	]).then(function(data){
+		//Validating that the entire question includes the cloze phrase
 		if(data.question.indexOf(data.cloze) !== -1){
+			//If yes, construct and push to the array from exports
 			clozeExports.arr.push(new clozeExports.ClozeFlashcard(data.cloze, data.question));
-
+			//Give the user the option to export their card to output.txt
 			inquirer.prompt([
 
 				{
@@ -91,6 +100,7 @@ function newCloze(){
 };
 
 function newBasic(){
+	//Use inquirer to gather the two necessary inputs for the basic constructor
 	inquirer.prompt([
 
 		{
@@ -108,8 +118,9 @@ function newBasic(){
 		}
 
 	]).then(function(data){
+		//Construct and push to the array from exports
 		basicExports.arr.push(new basicExports.BasicFlashcard(data.front, data.back));
-
+		//Give the user the option to export their card to output.txt
 		inquirer.prompt([
 
 			{
@@ -130,18 +141,22 @@ function newBasic(){
 	});
 };
 
+//Use FS to save the basic card
 function saveBasic(flashcard){
 	fs.appendFile('output.txt', `Front: ${flashcard.front} Back: ${flashcard.back} \n`, 'UTF-8', function(error){
 		if (error) throw error;
 	});
 }
 
+//Use FS to save the cloze card
 function saveCloze(flashcard){
 	fs.appendFile('output.txt', `Cloze: ${flashcard.cloze} Question: ${flashcard.question} \n`, 'UTF-8', function(error){
 		if (error) throw error;
 	});
 }
 
+//Notice we're using 'recursion' to call quiz() from inside of itself a number of times that
+//is equal to the number of indices in clozeExports.arr
 function quiz(){
 	if(count < clozeExports.arr.length){
 
@@ -155,7 +170,7 @@ function quiz(){
 			}
 
 		]).then(function(data){
-
+			//If right, increase correct answers, else increase wrong answers
 			if(data.question === clozeExports.arr[count].cloze) {
 				console.log('correct');
 				rightCount++;
@@ -170,12 +185,14 @@ function quiz(){
 		});
 
 	}else {
+		//When count is equal to the number of indices in clozeExports.arr, we can break our loop
 		gameOver();
 	};
 
 };
 
-
+//Notice we're using 'recursion' to call basicQuiz() from inside of itself a number of times that
+//is equal to the number of indices in basicExports.arr
 function basicQuiz(){
 	if(count < basicExports.arr.length){
 
@@ -189,7 +206,7 @@ function basicQuiz(){
 			}
 
 		]).then(function(data){
-
+			//If right, increase correct answers, else increase wrong answers
 			if(data.question === basicExports.arr[count].back) {
 				console.log('correct');
 				rightCount++;
@@ -204,12 +221,14 @@ function basicQuiz(){
 		});
 
 	}else {
+		//When count is equal to the number of indices in basicExports.arr, we can break our loop
 		gameOverBasic();
 	};
 
 };
 
-
+//This closes out our quiz and provides a summary of the user's performance then
+//allows the user to take it again or return to the main menu
 function gameOver(){
 	console.log(`You had ${rightCount} right answers and ${wrongCount} wrong answers`);
 	console.log("");
@@ -238,6 +257,8 @@ function gameOver(){
 
 };
 
+//This closes out our quiz and provides a summary of the user's performance then
+//allows the user to take it again or return to the main menu
 function gameOverBasic(){
 	console.log(`You had ${rightCount} right answers and ${wrongCount} wrong answers`);
 	console.log("");
@@ -266,4 +287,5 @@ function gameOverBasic(){
 
 }
 
+//Starts the CLI when file is ran
 start();
