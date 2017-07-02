@@ -6,9 +6,9 @@ var ClozeFlashcard = function(cloze, question){
 	this.displayQuestion = function(){
 		var display = question.replace(cloze, "...");
 		return display;
-	}
+	};
 
-}
+};
 
 //Empty array that will house our cloze flashcard objects
 var arr = [];

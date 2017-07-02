@@ -1,11 +1,13 @@
+/* eslint-disable no-alert, no-console */
+
 //Pull in our exports
-var clozeExports = require('./cloze.js');
-var basicExports = require('./basic.js');
+var clozeExports = require("./cloze.js");
+var basicExports = require("./basic.js");
 
 //Inquirer will help us create the CLI
-var inquirer = require('inquirer');
+var inquirer = require("inquirer");
 //FS will let us write to file
-var fs = require('fs');
+var fs = require("fs");
 
 //Variables to help keep track of our game logic
 var count = 0;
@@ -14,10 +16,10 @@ var wrongCount = 0;
 
 //This is the main component of the CLI, all options are accessed from here
 function start(){
-	console.log('');
-	console.log('==================================');
-	console.log('Welcome to the Flashcard Generator');
-	console.log('==================================');
+	console.log("");
+	console.log("==================================");
+	console.log("Welcome to the Flashcard Generator");
+	console.log("==================================");
 
 	inquirer.prompt([
 
@@ -25,10 +27,10 @@ function start(){
 			type: "list",
 			message: "Make your choice",
 			choices: ["Quiz me with cloze flashcards!", 
-			          "Quiz me with basic flashcards!",
-			          "Add a cloze flashcard", 
-					  "Add a basic flashcard", 
-					  "End Program"],
+				"Quiz me with basic flashcards!",
+				"Add a cloze flashcard", 
+				"Add a basic flashcard", 
+				"End Program"],
 			name: "choices"
 		}
 
@@ -44,10 +46,10 @@ function start(){
 			newBasic();
 		}else {
 			process.exit();
-		};
+		}
 
 	});
-};
+}
 
 
 function newCloze(){
@@ -88,16 +90,16 @@ function newCloze(){
 					start();
 				}else {
 					start();
-				};
+				}
 			});
 
 		}else {
 			console.log("Your answer is not included in the question");
 			newCloze();
-		};
+		}
 
 	});
-};
+}
 
 function newBasic(){
 	//Use inquirer to gather the two necessary inputs for the basic constructor
@@ -135,22 +137,22 @@ function newBasic(){
 				start();
 			}else {
 				start();
-			};
+			}
 		});
 
 	});
-};
+}
 
 //Use FS to save the basic card
 function saveBasic(flashcard){
-	fs.appendFile('output.txt', `Front: ${flashcard.front} Back: ${flashcard.back} \n`, 'UTF-8', function(error){
+	fs.appendFile("output.txt", `Front: ${flashcard.front} Back: ${flashcard.back} \n`, "UTF-8", function(error){
 		if (error) throw error;
 	});
 }
 
 //Use FS to save the cloze card
 function saveCloze(flashcard){
-	fs.appendFile('output.txt', `Cloze: ${flashcard.cloze} Question: ${flashcard.question} \n`, 'UTF-8', function(error){
+	fs.appendFile("output.txt", `Cloze: ${flashcard.cloze} Question: ${flashcard.question} \n`, "UTF-8", function(error){
 		if (error) throw error;
 	});
 }
@@ -172,12 +174,12 @@ function quiz(){
 		]).then(function(data){
 			//If right, increase correct answers, else increase wrong answers
 			if(data.question === clozeExports.arr[count].cloze) {
-				console.log('correct');
+				console.log("correct");
 				rightCount++;
 			}else {
 				console.log(clozeExports.arr[count].question);
 				wrongCount++;
-			};
+			}
 
 			count++;
 			quiz();
@@ -187,9 +189,9 @@ function quiz(){
 	}else {
 		//When count is equal to the number of indices in clozeExports.arr, we can break our loop
 		gameOver();
-	};
+	}
 
-};
+}
 
 //Notice we're using 'recursion' to call basicQuiz() from inside of itself a number of times that
 //is equal to the number of indices in basicExports.arr
@@ -208,12 +210,12 @@ function basicQuiz(){
 		]).then(function(data){
 			//If right, increase correct answers, else increase wrong answers
 			if(data.question === basicExports.arr[count].back) {
-				console.log('correct');
+				console.log("correct");
 				rightCount++;
 			}else {
 				console.log(basicExports.arr[count].back);
 				wrongCount++;
-			};
+			}
 
 			count++;
 			basicQuiz();
@@ -223,9 +225,9 @@ function basicQuiz(){
 	}else {
 		//When count is equal to the number of indices in basicExports.arr, we can break our loop
 		gameOverBasic();
-	};
+	}
 
-};
+}
 
 //This closes out our quiz and provides a summary of the user's performance then
 //allows the user to take it again or return to the main menu
@@ -255,7 +257,7 @@ function gameOver(){
 
 	});
 
-};
+}
 
 //This closes out our quiz and provides a summary of the user's performance then
 //allows the user to take it again or return to the main menu

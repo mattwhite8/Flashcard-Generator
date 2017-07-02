@@ -2,7 +2,7 @@
 var BasicFlashcard = function(front, back){
 	this.front = front;
 	this.back = back;
-}
+};
 
 //Empty array that will house our basic flashcard objects
 var arr = [];
@@ -18,7 +18,7 @@ var material = {
 //Loop through material and construct objects
 for (var key in material){
 	arr.push(new BasicFlashcard(key, material[key]));
-};
+}
 
 //Export the array of objects and the constructor out to flashcards.js
 module.exports = {arr, BasicFlashcard};
